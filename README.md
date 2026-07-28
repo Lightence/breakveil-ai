@@ -3,6 +3,7 @@
 ![BreakVeil AI icon](electron/assets/breakveil-icon.png)
 
 BreakVeil AI is a private Windows desktop workspace for discovering jobs, preparing applications and tracking progress. It is designed to keep the candidate in control: searches, role matching, application material and automation are review-first, and personal workspace data is stored locally.
+BreakVeil AI was coded and completed entirely by Open AI's ChatGPT.
 
 **Source:** [github.com/Lightence/breakveil-ai](https://github.com/Lightence/breakveil-ai)
 
