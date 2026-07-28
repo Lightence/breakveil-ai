@@ -1,7 +1,7 @@
 {
   "name": "breakveil-ai",
   "private": true,
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A private desktop workspace for job discovery, application preparation and progress tracking.",
   "author": "BreakVeil",
   "license": "GPL-3.0-only",
@@ -25,7 +25,7 @@
     "preview": "vite preview",
     "electron": "wait-on http://localhost:5173 && electron .",
     "desktop": "concurrently -k \"npm run dev\" \"npm run electron\"",
-    "package:win": "npm run build && electron-builder --win nsis"
+    "package:win": "npm run build && electron-builder --win nsis --publish never"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

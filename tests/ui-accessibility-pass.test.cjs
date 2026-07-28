@@ -167,6 +167,10 @@ test("open-source releases include GPL and exclude private credentials", () => {
   assert.match(license, /GNU GENERAL PUBLIC LICENSE/)
   assert.match(license, /Version 3, 29 June 2007/)
   assert.match(packageJson, /"license": "GPL-3\.0-only"/)
+  assert.match(
+    packageJson,
+    /"package:win": "[^"]*--publish never"/,
+  )
   assert.match(packageLock, /"license": "GPL-3\.0-only"/)
   assert.match(builder, /- LICENSE/)
   assert.match(builder, /- PRIVACY\.md/)
