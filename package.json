@@ -1,7 +1,7 @@
 {
   "name": "breakveil-ai",
   "private": true,
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A private desktop workspace for job discovery, application preparation and progress tracking.",
   "author": "BreakVeil",
   "license": "GPL-3.0-only",

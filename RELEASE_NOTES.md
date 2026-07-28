@@ -1,6 +1,6 @@
-# BreakVeil AI v0.4.3
+# BreakVeil AI v0.4.4
 
-This early-access update adds installed-app Gmail credential setup for BreakVeil AI on Windows.
+This early-access update makes custom Windows installation folders reliable and recoverable.
 
 ## Included
 
@@ -10,6 +10,8 @@ This early-access update adds installed-app Gmail credential setup for BreakVeil
 - Analytics, backups, themes and accessibility support.
 - GPL v3 source code and public release checks.
 - Secure Google OAuth credentials import for installed Windows builds.
+- An elevated all-users installer that can write to a user-selected local folder instead of requiring an AppData location.
+- Recovery from incomplete installation registrations whose app and uninstaller files were never created.
 
 ## Important early-release notes
 
