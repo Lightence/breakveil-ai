@@ -1,0 +1,73 @@
+name: Publish Windows release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish unsigned installer
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run automated tests
+        run: npm test
+
+      - name: Run lint checks
+        run: npm run lint
+
+      - name: Build unsigned Windows installer
+        run: npm run package:win
+
+      - name: Verify release contents and write checksum
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -LiteralPath "release" -Filter "BreakVeil AI-Setup-*.exe" | Select-Object -First 1
+          if (-not $installer) {
+            throw "The BreakVeil installer was not created."
+          }
+
+          $asarPath = "release/win-unpacked/resources/app.asar"
+          if (-not (Test-Path -LiteralPath $asarPath)) {
+            throw "The packaged app.asar file was not created."
+          }
+
+          $privateCredential = & npx.cmd --no-install asar list $asarPath |
+            Where-Object { $_ -match "(^|[\\/])electron[\\/]google[\\/]credentials\.json$" }
+          if ($privateCredential) {
+            throw "Private Google credentials were found inside the release package."
+          }
+
+          $signature = Get-AuthenticodeSignature -LiteralPath $installer.FullName
+          if ($signature.Status -ne "NotSigned") {
+            throw "This early release was expected to be unsigned, but its signature state is $($signature.Status)."
+          }
+
+          $hash = Get-FileHash -LiteralPath $installer.FullName -Algorithm SHA256
+          "{0}  {1}" -f $hash.Hash.ToLowerInvariant(), $installer.Name |
+            Set-Content -LiteralPath "release/SHA256SUMS.txt" -Encoding utf8
+
+      - name: Publish GitHub prerelease
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $installer = Get-ChildItem -LiteralPath "release" -Filter "BreakVeil AI-Setup-*.exe" | Select-Object -First 1
+          gh release create $env:GITHUB_REF_NAME $installer.FullName "release/SHA256SUMS.txt" --repo $env:GITHUB_REPOSITORY --title "BreakVeil AI $env:GITHUB_REF_NAME" --notes-file "RELEASE_NOTES.md" --prerelease --verify-tag

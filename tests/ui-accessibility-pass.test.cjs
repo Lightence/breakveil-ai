@@ -160,6 +160,9 @@ test("open-source releases include GPL and exclude private credentials", () => {
     "electron/google/credentials.example.json",
   )
   const settings = read("src/pages/Settings.jsx")
+  const releaseWorkflow = read(
+    ".github/workflows/release.yml",
+  )
 
   assert.match(license, /GNU GENERAL PUBLIC LICENSE/)
   assert.match(license, /Version 3, 29 June 2007/)
@@ -167,6 +170,16 @@ test("open-source releases include GPL and exclude private credentials", () => {
   assert.match(packageLock, /"license": "GPL-3\.0-only"/)
   assert.match(builder, /- LICENSE/)
   assert.match(builder, /- PRIVACY\.md/)
+  assert.match(
+    builder,
+    /!electron\/google\/credentials\.json/,
+  )
+  assert.match(releaseWorkflow, /Publish Windows release/)
+  assert.match(
+    releaseWorkflow,
+    /Private Google credentials were found inside the release package/,
+  )
+  assert.match(releaseWorkflow, /Get-FileHash/)
   assert.match(gitignore, /electron\/google\/credentials\.json/)
   assert.match(gitignore, /phase-\*-delivery\//)
   assert.match(credentialsExample, /YOUR_GOOGLE_OAUTH_CLIENT_ID/)

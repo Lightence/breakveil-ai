@@ -8,6 +8,7 @@ directories:
 files:
   - dist/**/*
   - electron/**/*
+  - "!electron/google/credentials.json"
   - package.json
   - LICENSE
   - PRIVACY.md
