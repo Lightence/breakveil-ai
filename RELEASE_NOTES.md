@@ -1,6 +1,6 @@
-# BreakVeil AI v0.4.2
+# BreakVeil AI v0.4.3
 
-This is the first public early-access release of BreakVeil AI for Windows.
+This early-access update adds installed-app Gmail credential setup for BreakVeil AI on Windows.
 
 ## Included
 
@@ -9,11 +9,12 @@ This is the first public early-access release of BreakVeil AI for Windows.
 - Review-first application and sending controls.
 - Analytics, backups, themes and accessibility support.
 - GPL v3 source code and public release checks.
+- Secure Google OAuth credentials import for installed Windows builds.
 
 ## Important early-release notes
 
 - This installer is **unsigned**, so Windows SmartScreen may show a warning. The project is applying for free open-source signing through SignPath Foundation.
-- The public installer deliberately contains no shared Google OAuth credentials. Gmail connection is unavailable in this build; developers can configure their own OAuth desktop client when running from source.
+- The public installer contains no shared Google OAuth credentials. Users can import their own Google OAuth Desktop app JSON file from **Automation**; BreakVeil encrypts it locally with Windows protected storage.
 - BreakVeil is an early community release. Keep a backup of important application records and report problems through GitHub Issues.
 
 The attached `SHA256SUMS.txt` file can be used to verify that the installer has not changed after publication.

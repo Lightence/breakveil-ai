@@ -29,8 +29,9 @@ Each connected provider has its own terms and privacy practices.
 ## Credentials
 
 - Reed, Adzuna and Jooble credentials are stored locally using Windows protected storage.
+- Imported Google OAuth client credentials are encrypted locally using Windows protected storage.
 - A Gmail OAuth token is stored locally until Gmail is disconnected.
-- The source repository contains only a blank Google credentials example. Real Google credentials must remain in the ignored `electron/google/credentials.json` file.
+- The source repository contains only a blank Google credentials example. Development credentials must remain in the ignored `electron/google/credentials.json` file.
 - Credentials and OAuth tokens are excluded from BreakVeil's readable exports and application backups.
 
 ## Backups

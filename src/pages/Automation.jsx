@@ -175,6 +175,11 @@ export default function Automation() {
   ] = useState(false)
 
   const [
+    isImportingCredentials,
+    setIsImportingCredentials,
+  ] = useState(false)
+
+  const [
     isDisconnecting,
     setIsDisconnecting,
   ] = useState(false)
@@ -762,6 +767,42 @@ export default function Automation() {
     }
   }
 
+  async function importGoogleCredentials() {
+    setIsImportingCredentials(true)
+
+    try {
+      const result =
+        await window.jobPilot.gmail
+          .importCredentials()
+
+      if (result?.canceled) {
+        return
+      }
+
+      if (!result?.ok) {
+        setMessage(
+          result?.error ||
+          "The Google credentials could not be imported.",
+        )
+
+        return
+      }
+
+      await loadGmailStatus()
+
+      setMessage(
+        "Google credentials imported securely. You can now connect Gmail.",
+      )
+    } catch (error) {
+      setMessage(
+        error?.message ||
+        "The Google credentials could not be imported.",
+      )
+    } finally {
+      setIsImportingCredentials(false)
+    }
+  }
+
   async function openGmailDrafts() {
     try {
       const result =
@@ -1313,7 +1354,13 @@ export default function Automation() {
           }
           isLoading={isLoading}
           isConnecting={isConnecting}
+          isImportingCredentials={
+            isImportingCredentials
+          }
           isDisconnecting={isDisconnecting}
+          onImportCredentials={
+            importGoogleCredentials
+          }
           onConnect={connectGmail}
           onOpenDrafts={openGmailDrafts}
           onRefresh={loadAllData}
@@ -1751,7 +1798,9 @@ function DeliveryStatusBar({
   automaticCount,
   isLoading,
   isConnecting,
+  isImportingCredentials,
   isDisconnecting,
+  onImportCredentials,
   onConnect,
   onOpenDrafts,
   onRefresh,
@@ -1933,7 +1982,8 @@ function DeliveryStatusBar({
               </button>
             </>
           ) : (
-            status.configured && (
+            <>
+              {status.configured && (
               <button
                 type="button"
                 disabled={
@@ -1959,7 +2009,37 @@ function DeliveryStatusBar({
                   ? "Waiting for Google"
                   : "Connect Gmail"}
               </button>
-            )
+              )}
+
+              <button
+                type="button"
+                disabled={
+                  isImportingCredentials ||
+                  isConnecting
+                }
+                onClick={
+                  onImportCredentials
+                }
+                className={`${secondaryButtonClass} col-span-2 w-full justify-center`}
+              >
+                {isImportingCredentials ? (
+                  <LoaderCircle
+                    size={16}
+                    className="animate-spin"
+                  />
+                ) : (
+                  <FileText
+                    size={16}
+                  />
+                )}
+
+                {isImportingCredentials
+                  ? "Importing Credentials"
+                  : status.configured
+                    ? "Replace Google Credentials"
+                    : "Import Google Credentials"}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -1968,8 +2048,8 @@ function DeliveryStatusBar({
         !isLoading && (
           <div className="border-t border-zinc-800 p-4 sm:p-5">
             <WarningBox
-              title="Credentials File Not Found"
-              message="Make sure credentials.json is inside electron/google, then restart BreakVeil."
+              title="Google Credentials Required"
+              message="Download a Desktop app OAuth credentials JSON file from Google Cloud, then select Import Google Credentials."
             />
           </div>
         )}

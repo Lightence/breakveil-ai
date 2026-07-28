@@ -3,6 +3,7 @@ const {
   BrowserWindow,
   dialog,
   ipcMain,
+  safeStorage,
   shell,
 } = require("electron")
 
@@ -76,6 +77,12 @@ const {
 const {
   registerDataRecovery,
 } = require("./data-recovery.cjs")
+
+const {
+  createEncryptedCredentialsRecord,
+  decryptCredentialsRecord,
+  parseGoogleCredentials,
+} = require("./google-credentials.cjs")
 
 const {
   registerCompanyResearch,
@@ -1281,11 +1288,19 @@ ipcMain.handle(
 |--------------------------------------------------------------------------
 */
 
-function getGmailCredentialsPath() {
+function getBundledGmailCredentialsPath() {
   return path.join(
     __dirname,
     "google",
     "credentials.json",
+  )
+}
+
+function getImportedGmailCredentialsPath() {
+  return path.join(
+    app.getPath("userData"),
+    "gmail-oauth",
+    "credentials.enc.json",
   )
 }
 
@@ -1296,21 +1311,33 @@ function getGmailTokenPath() {
   )
 }
 
-async function gmailCredentialsExist() {
-  try {
-    await fileSystem.access(
-      getGmailCredentialsPath(),
-    )
-
-    return true
-  } catch {
-    return false
-  }
-}
-
 async function readOAuthConfiguration() {
+  const importedCredentialsPath =
+    getImportedGmailCredentialsPath()
+
+  try {
+    const importedRecord =
+      JSON.parse(
+        await fileSystem.readFile(
+          importedCredentialsPath,
+          "utf8",
+        ),
+      )
+
+    return decryptCredentialsRecord(
+      importedRecord,
+      safeStorage,
+    ).configuration
+  } catch (error) {
+    if (
+      error?.code !== "ENOENT"
+    ) {
+      throw error
+    }
+  }
+
   const credentialsPath =
-    getGmailCredentialsPath()
+    getBundledGmailCredentialsPath()
 
   let credentialsContents
 
@@ -1328,31 +1355,44 @@ async function readOAuthConfiguration() {
 
   let credentials
 
-  try {
-    credentials =
-      JSON.parse(
-        credentialsContents,
-      )
-  } catch {
-    throw new Error(
-      "The Gmail credentials.json file is not valid JSON.",
+  credentials =
+    parseGoogleCredentials(
+      credentialsContents,
     )
-  }
 
-  const configuration =
-    credentials.installed ||
-    credentials.web
+  return credentials.configuration
+}
 
-  if (
-    !configuration?.client_id ||
-    !configuration?.client_secret
-  ) {
-    throw new Error(
-      "The Gmail credentials file does not contain a valid OAuth client.",
+async function writeImportedGmailCredentials(
+  credentials,
+) {
+  const credentialsPath =
+    getImportedGmailCredentialsPath()
+
+  const record =
+    createEncryptedCredentialsRecord(
+      credentials,
+      safeStorage,
     )
-  }
 
-  return configuration
+  await fileSystem.mkdir(
+    path.dirname(
+      credentialsPath,
+    ),
+    {
+      recursive: true,
+    },
+  )
+
+  await fileSystem.writeFile(
+    credentialsPath,
+    JSON.stringify(
+      record,
+      null,
+      2,
+    ),
+    "utf8",
+  )
 }
 
 async function readGmailTokenRecord() {
@@ -1539,10 +1579,9 @@ async function getAuthenticatedGmail() {
 ipcMain.handle(
   "gmail:get-status",
   async () => {
-    const configured =
-      await gmailCredentialsExist()
-
-    if (!configured) {
+    try {
+      await readOAuthConfiguration()
+    } catch (error) {
       return {
         configured: false,
         connected: false,
@@ -1550,7 +1589,7 @@ ipcMain.handle(
         needsReconnect: false,
 
         error:
-          "The Gmail credentials file could not be found.",
+          getErrorMessage(error),
       }
     }
 
@@ -1622,6 +1661,79 @@ ipcMain.handle(
 
         needsReconnect: true,
 
+        error:
+          getErrorMessage(error),
+      }
+    }
+  },
+)
+
+ipcMain.handle(
+  "gmail:import-credentials",
+  async () => {
+    try {
+      const result =
+        await dialog.showOpenDialog(
+          mainWindow,
+          {
+            title:
+              "Import Google OAuth Credentials",
+
+            buttonLabel:
+              "Import credentials",
+
+            properties: [
+              "openFile",
+            ],
+
+            filters: [
+              {
+                name:
+                  "Google credentials",
+                extensions: [
+                  "json",
+                ],
+              },
+            ],
+          },
+        )
+
+      if (
+        result.canceled ||
+        result.filePaths.length === 0
+      ) {
+        return {
+          ok: true,
+          canceled: true,
+        }
+      }
+
+      const credentialsContents =
+        await fileSystem.readFile(
+          result.filePaths[0],
+          "utf8",
+        )
+
+      const {
+        credentials,
+      } = parseGoogleCredentials(
+        credentialsContents,
+      )
+
+      await writeImportedGmailCredentials(
+        credentials,
+      )
+
+      await removeGmailTokenRecord()
+
+      return {
+        ok: true,
+        canceled: false,
+      }
+    } catch (error) {
+      return {
+        ok: false,
+        canceled: false,
         error:
           getErrorMessage(error),
       }

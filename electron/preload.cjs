@@ -174,6 +174,11 @@ contextBridge.exposeInMainWorld(
           "gmail:get-status",
         ),
 
+      importCredentials: () =>
+        ipcRenderer.invoke(
+          "gmail:import-credentials",
+        ),
+
       connect: () =>
         ipcRenderer.invoke(
           "gmail:connect",

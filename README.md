@@ -57,10 +57,10 @@ BreakVeil does not publish shared Google credentials. Each developer or distribu
 1. Enable the Gmail API in a Google Cloud project.
 2. Configure the OAuth consent screen and add any required test users.
 3. Create an OAuth client with the application type **Desktop app**.
-4. Copy `electron/google/credentials.example.json` to `electron/google/credentials.json`.
-5. Replace the placeholder values in the copied file with your own client values.
+4. In an installed build, open **Automation**, select **Import Google Credentials** and choose the downloaded JSON file.
+5. When running from source, you may instead copy `electron/google/credentials.example.json` to `electron/google/credentials.json` and replace the placeholder values.
 
-The real `credentials.json` file is deliberately ignored by Git and must never be committed. Gmail is optional; the rest of BreakVeil can be used without it.
+Imported credentials are encrypted using operating-system protected storage. The development-only `credentials.json` file is deliberately ignored by Git and must never be committed. Gmail is optional; the rest of BreakVeil can be used without it.
 
 Vacancy-provider credentials for Reed, Adzuna and Jooble are entered inside **Settings → Connections**. BreakVeil stores them using Windows protected storage.
 

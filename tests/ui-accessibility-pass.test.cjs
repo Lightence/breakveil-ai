@@ -52,6 +52,7 @@ test("long profile and automation panels expose accessible toggles", () => {
   assert.match(automation, /aria-controls="approved-applications-content"/)
   assert.match(automation, /aria-controls="sending-activity-content"/)
   assert.match(discovery, /aria-controls="automatic-discovery-settings"/)
+  assert.match(automation, /Import Google Credentials/)
 })
 
 test("empty Smart Match stays compact unless the user chose otherwise", () => {
