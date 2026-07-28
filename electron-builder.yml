@@ -1,0 +1,34 @@
+appId: io.github.lightence.breakveil
+productName: BreakVeil AI
+copyright: "Copyright © 2026 BreakVeil"
+
+directories:
+  output: release
+
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+  - LICENSE
+  - PRIVACY.md
+  - CODE_SIGNING_POLICY.md
+
+asar: true
+
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+artifactName: "${productName}-Setup-${version}.${ext}"
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: BreakVeil AI
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false

@@ -1,0 +1,50 @@
+# Dependency and build output
+node_modules/
+dist/
+dist-ssr/
+release/
+coverage/
+.vite/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.local
+electron/google/credentials.json
+electron/google/token*.json
+*.pem
+*.pfx
+*.p12
+*.key
+
+# Personal BreakVeil data and backups
+user-data/
+private/
+*.jobpilot-backup
+*.breakveil-backup
+
+# Historical local delivery bundles
+phase-*-delivery/
+/*.zip
+
+# Editors and operating systems
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
