@@ -163,6 +163,9 @@ test("open-source releases include GPL and exclude private credentials", () => {
   const releaseWorkflow = read(
     ".github/workflows/release.yml",
   )
+  const readme = read("README.md")
+  const signingPolicy = read("CODE_SIGNING_POLICY.md")
+  const releaseNotes = read("RELEASE_NOTES.md")
 
   assert.match(license, /GNU GENERAL PUBLIC LICENSE/)
   assert.match(license, /Version 3, 29 June 2007/)
@@ -184,6 +187,10 @@ test("open-source releases include GPL and exclude private credentials", () => {
     /Private Google credentials were found inside the release package/,
   )
   assert.match(releaseWorkflow, /Get-FileHash/)
+  assert.match(readme, /## Code signing policy/)
+  assert.match(readme, /## Uninstall BreakVeil/)
+  assert.match(signingPolicy, /Free code signing provided by/)
+  assert.match(releaseNotes, /## Code signing policy/)
   assert.match(gitignore, /electron\/google\/credentials\.json/)
   assert.match(gitignore, /phase-\*-delivery\//)
   assert.match(credentialsExample, /YOUR_GOOGLE_OAUTH_CLIENT_ID/)

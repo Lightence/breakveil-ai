@@ -10,7 +10,7 @@ Code signing links a release artifact to a reviewed source revision and helps us
 
 BreakVeil intends to apply for the SignPath Foundation open-source programme after the public repository and first release are available.
 
-Once the project is accepted, release pages will use the required attribution: **Free code signing provided by SignPath.io, certificate by SignPath Foundation.** Until approval is complete, release artifacts must be clearly marked as unsigned.
+Once the project is accepted, release pages will use the required attribution: **Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).** Until approval is complete, release artifacts must be clearly marked as unsigned.
 
 ## Roles
 

@@ -84,6 +84,16 @@ npm.cmd run package:win
 
 Unsigned installers may trigger Windows SmartScreen warnings. Public releases should be produced by the project's documented signing process; see [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md).
 
+## Uninstall BreakVeil
+
+Open **Windows Settings → Apps → Installed apps**, find **BreakVeil AI**, select its menu and choose **Uninstall**. BreakVeil keeps the local workspace data by default so an accidental uninstall does not erase application records. To remove selected local data first, use **Settings → Data & Privacy** inside BreakVeil.
+
+## Code signing policy
+
+Official binaries follow the project's [Code signing policy](CODE_SIGNING_POLICY.md), which identifies the committers, reviewers and signing approvers and links to the [privacy policy](PRIVACY.md).
+
+**Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).**
+
 ## Contributing and security
 
 - Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a change.

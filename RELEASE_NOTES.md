@@ -17,3 +17,9 @@ This is the first public early-access release of BreakVeil AI for Windows.
 - BreakVeil is an early community release. Keep a backup of important application records and report problems through GitHub Issues.
 
 The attached `SHA256SUMS.txt` file can be used to verify that the installer has not changed after publication.
+
+## Code signing policy
+
+Official binaries follow the BreakVeil [Code signing policy](https://github.com/Lightence/breakveil-ai/blob/main/CODE_SIGNING_POLICY.md) and [privacy policy](https://github.com/Lightence/breakveil-ai/blob/main/PRIVACY.md).
+
+**Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).**
