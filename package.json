@@ -1,7 +1,7 @@
 {
   "name": "breakveil-ai",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A private desktop workspace for job discovery, application preparation and progress tracking.",
   "author": "BreakVeil",
   "license": "GPL-3.0-only",
@@ -50,7 +50,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "concurrently": "^9.2.4",
     "electron": "^43.1.1",
-    "electron-builder": "^26.15.3",
+    "electron-builder": "26.15.7",
     "eslint": "^10.6.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",

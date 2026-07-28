@@ -1,4 +1,4 @@
-# BreakVeil AI v0.4.0
+# BreakVeil AI v0.4.1
 
 This is the first public early-access release of BreakVeil AI for Windows.
 
